@@ -6,6 +6,7 @@ var app = express();
 var port = 3000;
 
 app.use(morgan('dev'));
+app.use(express.json());
 app.use('/api', routes);
 
 app.use('/api', function(req, res) {

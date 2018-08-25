@@ -1,0 +1,22 @@
+{
+  "name": "qtify",
+  "version": "1.0.0",
+  "description": "Consensus playlist creation app for Spotify",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Huvok/Qtify.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Huvok/Qtify/issues"
+  },
+  "homepage": "https://github.com/Huvok/Qtify#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}

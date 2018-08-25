@@ -2,7 +2,7 @@
   "name": "qtify",
   "version": "1.0.0",
   "description": "Consensus playlist creation app for Spotify",
-  "main": "app.js",
+  "main": "./Server/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Huvok/Qtify#readme",
   "dependencies": {
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "morgan": "^1.9.0"
   }
 }

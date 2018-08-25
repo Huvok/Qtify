@@ -58,6 +58,22 @@ module.exports = {
                 }
             }
         });
+    },
+    putSong : function(req, res) {
+        var songId = req.body['songId'];
+        var playlistId = req.body['playlistId'];
+
+        conn.query('UPDATE groups_songs SET votes = votes + 1 WHERE group_id = ? AND song_id = ?', [playlistId, songId],
+            function(err, results, fields) {
+            if (err)
+                console.log(err);
+            else {
+                console.log('Vote received');
+                res.send(JSON.stringify({
+                    response: 'Vote received'
+                }));
+            }
+        });
     }
 }
 

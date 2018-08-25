@@ -2,8 +2,8 @@ CREATE DATABASE qtify;
 USE qtify;
 
 CREATE TABLE Users(
-	email VARCHAR(255),
-	PRIMARY KEY(email)
+	id VARCHAR(255),
+	PRIMARY KEY(id)
 );
 
 CREATE TABLE Groups(
@@ -12,6 +12,8 @@ CREATE TABLE Groups(
     token VARCHAR(255),
     PRIMARY KEY(id)
 );
+
+ALTER TABLE Groups MODIFY COLUMN token VARCHAR(1000);
 
 CREATE TABLE Songs(
 	id VARCHAR(255),
@@ -22,11 +24,11 @@ CREATE TABLE Songs(
 );
 
 CREATE TABLE Users_groups(
-	user_email VARCHAR(255),
+	user_id VARCHAR(255),
     group_id INT,
-    FOREIGN KEY (user_email) REFERENCES Users(email),
+    FOREIGN KEY (user_id) REFERENCES Users(id),
     FOREIGN KEY (group_id) REFERENCES Groups(id),
-    PRIMARY KEY (user_email, group_id)
+    PRIMARY KEY (user_id, group_id)
 );
 
 CREATE TABLE Groups_songs(
@@ -37,3 +39,10 @@ CREATE TABLE Groups_songs(
     FOREIGN KEY (song_id) REFERENCES Songs(id),
     PRIMARY KEY (group_id, song_id)
 );
+
+/* SELECT statements for each of the tables in the DB */
+SELECT * FROM Users_groups;
+SELECT * FROM Users;
+SELECT * FROM Groups;
+SELECT * FROM Songs;
+SELECT * FROM Groups_songs;

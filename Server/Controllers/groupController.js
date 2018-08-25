@@ -19,5 +19,18 @@ module.exports = {
             else
                 res.send(JSON.stringify(results));
         });
+    },
+
+    postSongsFromGroup : function(req, res) {
+        var body = req.body;
+        var groupId = body['groupId'];
+        
+        conn.query('SELECT song_id FROM groups_songs WHERE group_id = ?', [groupId], function (err, results, fields) {
+            if (err)
+                console.log(err);
+            else {
+                res.send(JSON.stringify(results));
+            }
+        });
     }
 }

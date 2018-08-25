@@ -49,3 +49,11 @@ export const getSong = (id, token) => {
     return {};
   });
 };
+
+export const getUserId = (token) => {
+  return axios.get(host + '/me').then((response) => {
+    return response.data.id;
+  }).catch((error) => {
+    return '';
+  });
+};

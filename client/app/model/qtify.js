@@ -28,3 +28,15 @@ export const sendSong = (id, playlist) => {
     return response.status == 200;
   });
 };
+
+export const voteSong = (songId, playlistId, vote) => {
+  axios.post(host + '/put/songs', {
+    songId: songId,
+    playlistId: playlistId,
+    vote: vote
+  }).then((response) => {
+    return response.status == 200;
+  }).catch((error) => {
+    return false;
+  });
+};

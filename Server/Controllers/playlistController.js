@@ -6,7 +6,7 @@ module.exports = {
         var userId = body['userId'];
         var authToken = body['authToken'];
         var playlistName = body['playlistName'];
-    
+
         var config = {
             headers: {
                 'Content-Type': 'application/json',
@@ -15,7 +15,7 @@ module.exports = {
         };
 
         axios.post('https://api.spotify.com/v1/users/' + userId + '/playlists', {
-            name: "Test",
+            name: playlistName,
             public: false,
             collaborative: true
         }, config)

@@ -1,5 +1,6 @@
 var axios = require('axios');
 var mysql = require('mysql2');
+
 const config = require('../config.js');
 
 const conn = new mysql.createConnection(config.db);

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, ActivityIndicator, Alert, Button } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator, Alert, Button, RefreshControl } from 'react-native';
 
 import { getSongs } from '../model/qtify';
 import { getSong } from '../model/spotify';
@@ -24,6 +24,10 @@ export default class Playlist extends React.Component {
   }
 
   componentDidMount() {
+    return this.load();
+  }
+
+  load() {
     return getSongs(this.state.playlist).then((songsIds) => {
       let promises = [];
       console.log(songsIds);
@@ -43,19 +47,22 @@ export default class Playlist extends React.Component {
     });
   }
 
-  render() {
-    if(this.state.isLoading) {
-      return (
-        <View style={{flex: 1}}>
-          <ActivityIndicator />
-        </View>
-      );
-    }
+  refresh() {
+    this.setState({isLoading: true, playlist: this.state.playlist});
+    this.load();
+  }
 
+  render() {
     return (
       <View style={{flex: 1}}>
         <View style={{flex: 9}}>
           <FlatList
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.isLoading}
+                onRefresh={() => this.refresh()}
+              />
+            }
             data={this.state.songs}
             renderItem={({item}) =>
               <Vote image={item.img} artist={item.artist} song={item.name} id={item.id} playlist={this.state.playlist}/>

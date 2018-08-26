@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, ActivityIndicator, Alert, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator, Alert, Button, TouchableOpacity, RefreshControl } from 'react-native';
 
 import { getPlaylists } from '../model/qtify';
 
@@ -20,6 +20,10 @@ export default class Main extends React.Component {
   }
 
   componentDidMount() {
+    return this.load();
+  }
+
+  load() {
     return getPlaylists().then((playlists) => {
       this.setState({
         isLoading: false,
@@ -34,18 +38,22 @@ export default class Main extends React.Component {
     });
   }
 
+  refresh() {
+    this.setState({isLoading: true});
+    this.load();
+  }
+
   render() {
-    if(this.state.isLoading) {
-      return (
-        <View>
-          <ActivityIndicator />
-        </View>
-      );
-    }
     return (
       <View style={{flex: 1}}>
         <View style={{flex: 9}}>
           <FlatList
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.isLoading}
+                onRefresh={() => this.refresh()}
+              />
+            }
             data={this.state.playlists}
             renderItem={({item}) =>
               <TouchableOpacity

@@ -14,8 +14,8 @@ module.exports = {
 
     postSongsFromGroup : function(req, res) {
         var body = req.body;
-        var groupId = body['groupId'];
-        
+        var groupId = body['playlistId'];
+
         let conn = dbManager.newConnection();
         conn.query('SELECT song_id FROM groups_songs WHERE group_id = ?', [groupId], function (err, results, fields) {
             if (err)
@@ -29,7 +29,7 @@ module.exports = {
     postUserToGroup : function(req, res) {
         var body = req.body;
         var userId = body['userId'];
-        var groupId = body['groupId'];
+        var groupId = body['playlistId'];
 
         let query = 'SELECT * FROM users WHERE id = ?';
         let conn = dbManager.newConnection();

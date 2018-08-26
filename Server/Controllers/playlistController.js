@@ -1,15 +1,5 @@
 var axios = require('axios');
-var mysql = require('mysql2');
-const config = require('../config.js');
-
-const conn = new mysql.createConnection(config.db);
-conn.connect(function(err) {
-    if (err) {
-        console.log("Cannot connect to the database");
-    } else {
-        console.log("Connection to the database established");
-    }
-});
+var dbManager = require('./dbModule.js');
 
 module.exports = {
     postPlaylist : function(req, res) {
@@ -32,6 +22,7 @@ module.exports = {
         }, config)
         .then(function (response) {
             let query = 'INSERT INTO groups (id, group_name, token) VALUES (?, ?, ?);';
+            let conn = dbManager.newConnection();
             conn.query(query, [response.data['id'], playlistName, authToken], function (err, results, fields) {
                 if (err)
                     console.log(err);
@@ -47,6 +38,7 @@ module.exports = {
                     });
                 }
             });
+            dbManager.closeConnection(conn);
         })
         .catch(function (error) {
             console.log(error);

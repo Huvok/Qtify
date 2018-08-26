@@ -1,36 +1,29 @@
-var mysql = require('mysql2');
-
-const config = require('../config.js');
-
-const conn = new mysql.createConnection(config.db);
-conn.connect(function(err) {
-    if (err) {
-        console.log("Cannot connect to the database");
-    } else {
-        console.log("Connection to the database established");
-    }
-});
+var dbManager = require("./dbModule.js");
 
 module.exports = {
     getGroups : function(req, res) {
+        let conn = dbManager.newConnection();
         conn.query('SELECT id, group_name FROM groups', function(err, results, fields) {
             if (err)
                 console.log(err);
             else
                 res.send(JSON.stringify(results));
         });
+        dbManager.closeConnection(conn);
     },
 
     postSongsFromGroup : function(req, res) {
         var body = req.body;
         var groupId = body['groupId'];
         
+        let conn = dbManager.newConnection();
         conn.query('SELECT song_id FROM groups_songs WHERE group_id = ?', [groupId], function (err, results, fields) {
             if (err)
                 console.log(err);
             else
                 res.send(JSON.stringify(results));
         });
+        dbManager.closeConnection(conn);
     },
 
     postUserToGroup : function(req, res) {
@@ -39,13 +32,14 @@ module.exports = {
         var groupId = body['groupId'];
 
         let query = 'SELECT * FROM users WHERE id = ?';
+        let conn = dbManager.newConnection();
         conn.query(query, userId, function (err, results, field) {
             if (err)
                 console.log(err);
             else {
                 let success = true;
                 if (results.length == 0) {
-                    success = postUser(userId);
+                    success = postUser(conn, userId);
                 }
                 if (success) {
                     query = 'INSERT INTO users_groups VALUES (?, ?);';
@@ -58,17 +52,20 @@ module.exports = {
                 }
             }
         });
+        dbManager.closeConnection(conn);
     },
 
     postUser : function(req, res) {
         var body = req.body;
         var userId = body['userId'];
-        if (postUser(userId))
+        let conn = dbManager.newConnection();
+        if (postUser(conn, userId))
             res.send(JSON.stringify({ response: 'OK' }));
+        dbManager.closeConnection(conn);
     }
 }
 
-function postUser(userId) {
+function postUser(conn, userId) {
     conn.query('INSERT INTO users VALUES(?);', [userId], function(err, results, fields) {
         if (err) {
             console.log(err);

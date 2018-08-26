@@ -1,22 +1,12 @@
 var axios = require('axios');
-var mysql = require('mysql2');
-
-const config = require('../config.js');
-
-const conn = new mysql.createConnection(config.db);
-conn.connect(function(err) {
-    if (err) {
-        console.log("Cannot connect to the database");
-    } else {
-        console.log("Connection to the database established");
-    }
-});
+var dbManager = require('./dbModule.js');
 
 module.exports = {
     postSong : function(req, res) {
         var songId = req.body['songId'];
         var playlistId = req.body['playlistId'];
 
+        let conn = dbManager.newConnection();
         conn.query('SELECT token FROM groups WHERE id = ?', [playlistId], function(err, results, fields) {
             if (err)
                 console.log(err);
@@ -45,7 +35,7 @@ module.exports = {
                                         console.log(err);
                                     else {
                                         console.log('Song inserted');
-                                        postSongToGroup(songId, playlistId, authToken);
+                                        postSongToGroup(conn, songId, playlistId, authToken);
                                         res.send(JSON.stringify({
                                             response: 'OK'
                                         }));
@@ -56,7 +46,7 @@ module.exports = {
                                 console.log(error);
                             });
                         } else {
-                            postSongToGroup(songId, playlistId, authToken);
+                            postSongToGroup(conn, songId, playlistId, authToken);
                             res.send(JSON.stringify({
                                 response: 'OK'
                             }));
@@ -65,11 +55,15 @@ module.exports = {
                 });
             }
         });
+
+        dbManager.closeConnection(conn);
     },
+
     putSong : function(req, res) {
         var songId = req.body['songId'];
         var playlistId = req.body['playlistId'];
         var vote = req.body['vote'];
+        let conn = dbManager.newConnection();
 
         conn.query('UPDATE groups_songs SET votes = votes + ? WHERE group_id = ? AND song_id = ?', [vote, playlistId, songId],
             function(err, results, fields) {
@@ -82,10 +76,12 @@ module.exports = {
                 }));
             }
         });
+
+        dbManager.closeConnection(conn);
     }
 }
 
-function postSongToGroup(songId, playlistId, authToken) {
+function postSongToGroup(conn, songId, playlistId, authToken) {
     conn.query('INSERT INTO groups_songs(group_id, song_id, votes) VALUES(?, ?, ?)', [playlistId, songId, 1],
         function(err, results, fields) {
         if (err)

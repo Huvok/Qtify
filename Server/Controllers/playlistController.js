@@ -24,9 +24,10 @@ module.exports = {
             let query = 'INSERT INTO groups (id, group_name, token) VALUES (?, ?, ?);';
             let conn = dbManager.newConnection();
             conn.query(query, [response.data['id'], playlistName, authToken], function (err, results, fields) {
-                if (err)
+                if (err) {
                     console.log(err);
-                else {
+                    dbManager.closeConnection(conn);
+                } else {
                     query = 'INSERT INTO users_groups VALUES (?, ?);';
                     conn.query(query, [userId, response.data['id']], function (err, results, fields) {
                         if (err)
@@ -35,10 +36,11 @@ module.exports = {
                             res.send(JSON.stringify({
                                 response: 'OK'
                             }));
+
+                        dbManager.closeConnection(conn);
                     });
                 }
             });
-            dbManager.closeConnection(conn);
         })
         .catch(function (error) {
             console.log(error);

@@ -55,8 +55,6 @@ module.exports = {
                 });
             }
         });
-
-        dbManager.closeConnection(conn);
     },
 
     putSong : function(req, res) {
@@ -89,6 +87,7 @@ function postSongToGroup(conn, songId, playlistId, authToken) {
         else {
             console.log('Song proposed');
             setTimeout(function() {
+                let conn = dbManager.newConnection();
                 conn.query('SELECT * FROM groups_songs WHERE group_id = ? AND song_id = ?', [playlistId, songId], function(err, results, fields) {
                     if (err)
                         console.log(err);
@@ -110,17 +109,23 @@ function postSongToGroup(conn, songId, playlistId, authToken) {
                                 function(err, results, fields) {
                                 if (err)
                                     console.log(err);
+
+                                dbManager.closeConnection(conn);
                             });
                         } else {
                             conn.query('DELETE FROM groups_songs WHERE group_id = ? AND song_id = ?', [playlistId, songId],
                                 function(err, results, fields) {
                                 if (err)
                                     console.log(err);
+
+                                dbManager.closeConnection(conn);
                             });
                         }
                     }
                 });
-            }, 10000);
+            }, 1000000);
         }
+
+        dbManager.closeConnection(conn);
     });
 }

@@ -12,11 +12,15 @@ export default class Main extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {isLoading: true};
+    this.state = {
+      isLoading: true,
+      user: this.props.navigation.getParam('userId', ''),
+      token: this.props.navigation.getParam('token', '')
+    };
   }
 
   goToPlaylist(playlist) {
-    this.props.navigation.navigate('Playlist', {playlist: playlist.id, name: playlist.group_name});
+    this.props.navigation.navigate('Playlist', {playlist: playlist.id, name: playlist.group_name, token: this.state.token});
   }
 
   componentDidMount() {
@@ -27,19 +31,21 @@ export default class Main extends React.Component {
     return getPlaylists().then((playlists) => {
       this.setState({
         isLoading: false,
-        playlists: playlists
+        playlists: playlists,
+        token: this.state.token
       });
     }).catch((error) => {
       this.setState({
         isLoading: false,
-        playlists: []
+        playlists: [],
+        token: this.state.token
       });
       Alert.alert('Error', 'Unable to load playlists', [{text: 'OK', onPress: () => console.log('OK Pressed')}], { cancelable: false });
     });
   }
 
   refresh() {
-    this.setState({isLoading: true});
+    this.setState({isLoading: true, token: this.state.token});
     this.load();
   }
 
@@ -68,7 +74,7 @@ export default class Main extends React.Component {
           <Button
           color='#1db954'
           title="Create Playlist"
-          onPress={() => this.props.navigation.navigate('Create', {updatePreView: this.refresh.bind(this)})}
+          onPress={() => this.props.navigation.navigate('Create', {updatePreView: this.refresh.bind(this), token: this.state.token})}
           />
         </View>
       </View>

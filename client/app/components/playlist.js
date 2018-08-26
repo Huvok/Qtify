@@ -6,8 +6,6 @@ import { getSong } from '../model/spotify';
 
 import { styles } from '../styles/style';
 
-import token from '../data/token';
-
 import Vote from './vote';
 
 export default class Playlist extends React.Component {
@@ -20,7 +18,8 @@ export default class Playlist extends React.Component {
   constructor(props) {
     super(props);
     let playlistId = this.props.navigation.getParam('playlist', '0000');
-    this.state = {isLoading: true, playlist: playlistId};
+    let token = this.props.navigation.getParam('token', '');
+    this.state = {isLoading: true, playlist: playlistId, token: token};
   }
 
   componentDidMount() {
@@ -33,7 +32,7 @@ export default class Playlist extends React.Component {
       console.log(songsIds);
       console.log(this.state.playlist);
       songsIds.forEach((song) => {
-        promises.push(getSong(song.song_id, token));
+        promises.push(getSong(song.song_id, this.state.token));
       });
 
       return Promise.all(promises).then((songs) => {
@@ -41,14 +40,15 @@ export default class Playlist extends React.Component {
         this.setState({
           isLoading: false,
           songs: songs, // [{name: 'Hello', artist: 'Adelle', img: 'https://i.scdn.co/image/7afb855c28a2c8ad5ed9d51460736f4022e60bbf'},{name: 'Hello', artist: 'Adelle', img: 'https://i.scdn.co/image/7afb855c28a2c8ad5ed9d51460736f4022e60bbf'}],
-          playlist: this.state.playlist
+          playlist: this.state.playlist,
+          token: this.state.token
         });
       });
     });
   }
 
   refresh() {
-    this.setState({isLoading: true, playlist: this.state.playlist});
+    this.setState({isLoading: true, playlist: this.state.playlist, token: this.state.token});
     this.load();
   }
 
@@ -74,7 +74,7 @@ export default class Playlist extends React.Component {
           <Button
             color='#1db954'
             title="Add song"
-            onPress={() => this.props.navigation.navigate('Search', {playlist: this.state.playlist, updatePreView: this.refresh.bind(this)})}
+            onPress={() => this.props.navigation.navigate('Search', {playlist: this.state.playlist, updatePreView: this.refresh.bind(this), token: this.state.token})}
           />
         </View>
       </View>

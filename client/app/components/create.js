@@ -4,17 +4,24 @@ import { StyleSheet, View, TextInput, Button, KeyboardAvoidingView } from 'react
 import { createPlaylist } from '../model/qtify';
 import { getUserId } from '../model/spotify';
 
-import token from '../data/token';
 
 export default class Create extends React.Component {
   static navigationOptions = {
     title: 'New Playlist'
   };
+
+  constructor(props) {
+    super(props);
+    this.state {
+      token: this.props.navigation.getParam('token', '');
+    };
+  }
+
   addPlaylist() {
     let playlistName = this.state.text;
     getUserId(token).then((user) => {
       console.log(user);
-      createPlaylist(user, playlistName, token).then((created) => {
+      createPlaylist(user, playlistName, this.state.token).then((created) => {
         if(created) {
           let updatePreView = this.props.navigation.getParam('updatePreView', () => { console.log("Default function"); });
           updatePreView();
@@ -39,7 +46,7 @@ export default class Create extends React.Component {
         <TextInput
           style={{height: 40, fontSize: 20}}
           placeholder="Type the playlist name"
-          onChangeText={(text) => this.setState({text})}
+          onChangeText={(text) => this.setState({text, token: this.state.token})}
           autoFocus
         />
         <View>

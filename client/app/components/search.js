@@ -6,8 +6,6 @@ import { sendSong } from '../model/qtify';
 
 import Add from './add';
 
-import token from '../data/token';
-
 export default class Search extends React.Component {
 
   constructor(props) {
@@ -16,7 +14,8 @@ export default class Search extends React.Component {
       text: '',
       isLoading: false,
       songs: [],
-      playlist: this.props.navigation.getParam('playlist', '0000')
+      playlist: this.props.navigation.getParam('playlist', '0000'),
+      token: this.props.navigation.getParam('token', '')
     };
   }
 

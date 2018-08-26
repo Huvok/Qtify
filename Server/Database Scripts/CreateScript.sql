@@ -7,13 +7,11 @@ CREATE TABLE Users(
 );
 
 CREATE TABLE Groups(
-	id INT AUTO_INCREMENT,
+	id VARCHAR(255),
     group_name VARCHAR(255),
-    token VARCHAR(255),
+    token VARCHAR(1000),
     PRIMARY KEY(id)
 );
-
-ALTER TABLE Groups MODIFY COLUMN token VARCHAR(1000);
 
 CREATE TABLE Songs(
 	id VARCHAR(255),
@@ -25,14 +23,14 @@ CREATE TABLE Songs(
 
 CREATE TABLE Users_groups(
 	user_id VARCHAR(255),
-    group_id INT,
+    group_id VARCHAR(255),
     FOREIGN KEY (user_id) REFERENCES Users(id),
     FOREIGN KEY (group_id) REFERENCES Groups(id),
     PRIMARY KEY (user_id, group_id)
 );
 
 CREATE TABLE Groups_songs(
-	group_id INT,
+	group_id VARCHAR(255),
     song_id VARCHAR(255),
     votes INT,
     FOREIGN KEY (group_id) REFERENCES Groups(id),

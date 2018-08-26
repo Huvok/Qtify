@@ -37,16 +37,14 @@ export const getSongs = (playlistId) => {
   return axios.post(host + '/group/songs', {
     playlistId: playlistId
   }).then((response) => {
-    console.log(response.data);
     return response.data;
   }).catch((error) => {
-    console.log("Error");
     return [];
   });
 };
 
 export const voteSong = (songId, playlistId, vote) => {
-  axios.post(host + '/put/songs', {
+  return axios.post(host + '/put/songs', {
     songId: songId,
     playlistId: playlistId,
     vote: vote

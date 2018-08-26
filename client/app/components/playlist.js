@@ -36,7 +36,7 @@ export default class Playlist extends React.Component {
         console.log(songs);
         this.setState({
           isLoading: false,
-          songs: /*songs*/ [{name: 'Hello', artist: 'Adelle', img: 'https://i.scdn.co/image/7afb855c28a2c8ad5ed9d51460736f4022e60bbf'},{name: 'Hello', artist: 'Adelle', img: 'https://i.scdn.co/image/7afb855c28a2c8ad5ed9d51460736f4022e60bbf'}],
+          songs: songs, // [{name: 'Hello', artist: 'Adelle', img: 'https://i.scdn.co/image/7afb855c28a2c8ad5ed9d51460736f4022e60bbf'},{name: 'Hello', artist: 'Adelle', img: 'https://i.scdn.co/image/7afb855c28a2c8ad5ed9d51460736f4022e60bbf'}],
           playlist: this.state.playlist
         });
       });

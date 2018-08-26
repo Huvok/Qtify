@@ -8,8 +8,8 @@ module.exports = {
                 console.log(err);
             else
                 res.send(JSON.stringify(results));
+            dbManager.closeConnection(conn);
         });
-        dbManager.closeConnection(conn);
     },
 
     postSongsFromGroup : function(req, res) {
@@ -22,8 +22,8 @@ module.exports = {
                 console.log(err);
             else
                 res.send(JSON.stringify(results));
+            dbManager.closeConnection(conn);
         });
-        dbManager.closeConnection(conn);
     },
 
     postUserToGroup : function(req, res) {
@@ -34,8 +34,10 @@ module.exports = {
         let query = 'SELECT * FROM users WHERE id = ?';
         let conn = dbManager.newConnection();
         conn.query(query, userId, function (err, results, field) {
-            if (err)
+            if (err) {
                 console.log(err);
+                dbManager.closeConnection(conn);
+            }
             else {
                 let success = true;
                 if (results.length == 0) {
@@ -48,11 +50,11 @@ module.exports = {
                             console.log(err);
                         else
                             res.send(JSON.stringify({ results: "OK" }));
+                        dbManager.closeConnection(conn);
                     });
                 }
             }
         });
-        dbManager.closeConnection(conn);
     },
 
     postUser : function(req, res) {

@@ -14,8 +14,10 @@ module.exports = {
                 var authToken = results[0]['token'];
 
                 conn.query('SELECT * FROM songs WHERE id = \'' + songId + '\'', function(err, results, fields) {
-                    if (err)
+                    if (err) {
                         console.log(err);
+                        dbManager.closeConnection(conn);
+                    }
                     else {
                         if (results.length == 0) {
                             var config = {
@@ -40,6 +42,7 @@ module.exports = {
                                             response: 'OK'
                                         }));
                                     }
+                                    dbManager.closeConnection(conn);
                                 });
                             })
                             .catch(function(error) {
@@ -50,6 +53,7 @@ module.exports = {
                             res.send(JSON.stringify({
                                 response: 'OK'
                             }));
+                            dbManager.closeConnection(conn);
                         }
                     }
                 });
@@ -73,9 +77,8 @@ module.exports = {
                     response: 'Vote received'
                 }));
             }
+            dbManager.closeConnection(conn);
         });
-
-        dbManager.closeConnection(conn);
     }
 }
 

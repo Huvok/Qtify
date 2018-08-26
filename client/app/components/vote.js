@@ -7,7 +7,7 @@ import { voteSong } from '../model/qtify';
 export default class Vote extends React.Component {
   constructor(props){
     super(props);
-    this.state = {voteEnum: 0};
+    this.state = {vote: 0};
   }
 
   // Toggle the state depending on the move
@@ -29,6 +29,7 @@ export default class Vote extends React.Component {
       nextVote = change;
     }
 
+    console.log(vote);
     voteSong(this.props.id, this.props.playlist, vote).then((voted) => {
       if(voted) {
         this.setState({

@@ -25,12 +25,12 @@ module.exports = {
                                     'Authorization': 'Bearer ' + authToken
                                 }
                             };
-        
+
                             axios.get('https://api.spotify.com/v1/tracks/' + songId, config).then(function(response) {
                                 var songName = response.data['name'];
                                 var artist = response.data['artists'][0]['name'];
                                 var imageUrl = response.data['album']['images'][0]['url'];
-                                
+
                                 conn.query('INSERT INTO songs(id, song_name, artist, image_url) VALUES(?, ?, ?, ?)', [songId, songName, artist, imageUrl],
                                     function(err, results, fields) {
                                     if (err)
@@ -95,6 +95,7 @@ function postSongToGroup(conn, songId, playlistId, authToken) {
                     if (err)
                         console.log(err);
                     else {
+                        console.log(results);
                         if (results[0]['votes'] >= 0) {
 
                             var config = {
@@ -103,7 +104,7 @@ function postSongToGroup(conn, songId, playlistId, authToken) {
                                     'Authorization': 'Bearer ' + authToken
                                 }
                             };
-                    
+
                             axios.post('https://api.spotify.com/v1/playlists/' + playlistId + '/tracks', {
                                 uris: ["spotify:track:" + songId]
                             }, config);
@@ -126,7 +127,7 @@ function postSongToGroup(conn, songId, playlistId, authToken) {
                         }
                     }
                 });
-            }, 1000000);
+            }, 60000);
         }
 
         dbManager.closeConnection(conn);

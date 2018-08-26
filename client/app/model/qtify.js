@@ -44,7 +44,7 @@ export const getSongs = (playlistId) => {
 };
 
 export const voteSong = (songId, playlistId, vote) => {
-  return axios.post(host + '/put/songs', {
+  return axios.put(host + '/song', {
     songId: songId,
     playlistId: playlistId,
     vote: vote

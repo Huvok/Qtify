@@ -3,7 +3,7 @@ var dbManager = require("./dbModule.js");
 module.exports = {
     getGroups : function(req, res) {
         let conn = dbManager.newConnection();
-        conn.query('SELECT id, group_name FROM groups', function(err, results, fields) {
+        conn.query('SELECT id, group_name FROM groups ORDER BY group_name', function(err, results, fields) {
             if (err)
                 console.log(err);
             else

@@ -1,4 +1,3 @@
-var axios = require('axios');
 var mysql = require('mysql2');
 
 const config = require('../config.js');
@@ -29,9 +28,52 @@ module.exports = {
         conn.query('SELECT song_id FROM groups_songs WHERE group_id = ?', [groupId], function (err, results, fields) {
             if (err)
                 console.log(err);
-            else {
+            else
                 res.send(JSON.stringify(results));
+        });
+    },
+
+    postUserToGroup : function(req, res) {
+        var body = req.body;
+        var userId = body['userId'];
+        var groupId = body['groupId'];
+
+        let query = 'SELECT * FROM users WHERE id = ?';
+        conn.query(query, userId, function (err, results, field) {
+            if (err)
+                console.log(err);
+            else {
+                let success = true;
+                if (results.length == 0) {
+                    success = postUser(userId);
+                }
+                if (success) {
+                    query = 'INSERT INTO users_groups VALUES (?, ?);';
+                    conn.query(query, [userId, groupId], function (err, results, fields) {
+                        if (err)
+                            console.log(err);
+                        else
+                            res.send(JSON.stringify({ results: "OK" }));
+                    });
+                }
             }
         });
+    },
+
+    postUser : function(req, res) {
+        var body = req.body;
+        var userId = body['userId'];
+        if (postUser(userId))
+            res.send(JSON.stringify({ response: 'OK' }));
     }
+}
+
+function postUser(userId) {
+    conn.query('INSERT INTO users VALUES(?);', [userId], function(err, results, fields) {
+        if (err) {
+            console.log(err);
+            return false;
+        }
+        return true;
+    });
 }

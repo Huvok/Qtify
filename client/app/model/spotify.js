@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const host = 'https://api.spotify.com/v1'
+const host = 'https://api.spotify.com/v1';
 
 export const searchSongs = (song, token) => {
   return axios.get(host + '/search', {
@@ -41,9 +41,9 @@ export const getSong = (id, token) => {
   }).then((response) => {
     return {
       id: id,
-      artist: response.data.artist[0].name,
+      artist: response.data.artists[0].name,
       name: response.data.name,
-      img: response.data.album.images[2]
+      img: response.data.album.images[2].url
     };
   }).catch((error) => {
     return {};
@@ -51,9 +51,15 @@ export const getSong = (id, token) => {
 };
 
 export const getUserId = (token) => {
-  return axios.get(host + '/me').then((response) => {
+  return axios.get(host + '/me', {
+    headers: {
+      Authorization: 'Bearer ' + token
+    }
+  }).then((response) => {
+    console.log(response.data);
     return response.data.id;
   }).catch((error) => {
+    console.log(error);
     return '';
   });
 };

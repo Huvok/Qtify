@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, FlatList, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, TextInput, FlatList, ActivityIndicator, TouchableNativeFeedback } from 'react-native';
 
 import { searchSongs } from '../model/spotify';
+import { sendSong } from '../model/qtify';
 
 export default class Search extends React.Component {
 
@@ -10,25 +11,38 @@ export default class Search extends React.Component {
     this.state = {
       text: '',
       isLoading: false,
-      songs: []
+      songs: [],
+      playlist: this.props.navigation.getParam('playlist', '0000')
     };
   }
 
   searchSong(song) {
-    let token = 'BQBeOYJGQHTRjBbgq6oAiOM7rFT8y5UOu8z6MUu3lzKreQNZCw_Gca_SkbytRHzjNxtkKE_HX1CdsCfd39Spmkqyap17YPC8D00xV4qr2XREX1TABuOTywctKWe41j2Ch3VtHs7NLeoY9ZgpWc5CKHNhiJi-FdRdCg2e0qsRDb8BgcAdtw9vfkcBytzJ--2h-IHpRKdje5-mVu96o8K4-cjcsgQYOQ0oMpoy2Ea6BBAtEb6i0dZAZeo0vQj_sBXv8NPNcDSBXmRywWoWHncOsK6Dd9t_j4n6atVo';
+    let token = 'BQAy0UPfxjfcOMj8hPC6fT7NcbA1o-VZypNSTm_X1n6736HEzPVjhrNBfL0xTrmjyDgPE4w8ubSt0AQ5r5HT6KWQ9NJj3AC91TIkKp2z45iGHg1jvb1Vcgq8NQ-OZKqSoFcNtbn43EYs0RqnkOVGgoRypkv6TUgU9wkIjTWHlheOUuyQYN7mERrDZNAUlgV2HZGgV5T09XygPCkn857cSS_lo3cpmxZdy7vg2iBRVMLJbOWkGOCxlZCZPqk6qDE8wOaPwlrdPAogTjKzJb0M5Cza487f7UOflTUQ';
 
     this.setState({
       text: song,
       isLoading: true,
-      songs: []
+      songs: [],
+      playlist: this.state.playlist
     });
 
     searchSongs(song, token).then((result) => {
       this.setState({
         text: song,
         isLoading: false,
-        songs: result
+        songs: result,
+        playlist: this.state.playlist
       });
+    });
+  }
+
+  addSongToPlaylist(songId) {
+    sendSong(songId, this.state.playlist).then((added) => {
+      if(added) {
+        this.props.navigation.goBack();
+      } else {
+        console.log('Unable to add a song');
+      }
     });
   }
 
@@ -65,7 +79,12 @@ export default class Search extends React.Component {
         />
         <FlatList
           data={this.state.songs}
-          renderItem={({item}) => <Text>{item.name}, {item.artist}</Text>}
+          renderItem={({item}) =>
+            <TouchableNativeFeedback
+            onPress={() => this.addSongToPlaylist(item.id)}>
+              <Text style={{padding: 10}}>{item.name}, {item.artist}</Text>
+            </TouchableNativeFeedback>
+          }
           keyExtractor={(item, index) => index.toString()}
         />
         </View>

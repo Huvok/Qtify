@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, ActivityIndicator, Alert, Button } from 'react-native';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator, Alert, Button, TouchableNativeFeedback } from 'react-native';
 
 import { getPlaylists } from '../model/qtify';
 
@@ -7,6 +7,10 @@ export default class Main extends React.Component {
   constructor(props) {
     super(props);
     this.state = {isLoading: true};
+  }
+
+  goToPlaylist(playlist) {
+    this.props.navigation.navigate('Playlist', {playlist: playlist});
   }
 
   componentDidMount() {
@@ -37,7 +41,10 @@ export default class Main extends React.Component {
         <FlatList
           data={this.state.playlists}
           renderItem={({item}) =>
-            <Text>{item.group_name}, {item.id}</Text>
+            <TouchableNativeFeedback
+              onPress={() => this.goToPlaylist(item.id)}>
+              <Text style={{padding: 10}}>{item.group_name}</Text>
+            </TouchableNativeFeedback>
           }
           keyExtractor={(item, index) => index.toString()}
         />

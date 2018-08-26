@@ -68,7 +68,7 @@ export default class Main extends React.Component {
           <Button
           color='#1db954'
           title="Create Playlist"
-          onPress={() => this.props.navigation.navigate('Create')}
+          onPress={() => this.props.navigation.navigate('Create', {updatePreView: this.refresh.bind(this)})}
           />
         </View>
       </View>

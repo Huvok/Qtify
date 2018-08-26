@@ -16,7 +16,9 @@ export default class Create extends React.Component {
       console.log(user);
       createPlaylist(user, playlistName, token).then((created) => {
         if(created) {
-          this.props.navigation.navigate('Main');
+          let updatePreView = this.props.navigation.getParam('updatePreView', () => { console.log("Default function"); });
+          updatePreView();
+          this.props.navigation.goBack();
         } else {
           Alert.alert(
             'Error',

@@ -74,7 +74,7 @@ export default class Playlist extends React.Component {
           <Button
             color='#1db954'
             title="Add song"
-            onPress={() => this.props.navigation.navigate('Search', {playlist: this.state.playlist})}
+            onPress={() => this.props.navigation.navigate('Search', {playlist: this.state.playlist, updatePreView: this.refresh.bind(this)})}
           />
         </View>
       </View>

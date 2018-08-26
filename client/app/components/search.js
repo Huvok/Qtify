@@ -45,6 +45,8 @@ export default class Search extends React.Component {
   addSongToPlaylist(songId) {
     sendSong(songId, this.state.playlist).then((added) => {
       if(added) {
+        let updatePreView = this.props.navigation.getParam('updatePreView', () => {console.log("Default function");});
+        updatePreView();
         this.props.navigation.goBack();
       } else {
         console.log('Unable to add a song');

@@ -1,13 +1,17 @@
 import React from 'react';
-import { StyleSheet, View, TextInput, Button } from 'react-native';
+import { StyleSheet, View, TextInput, Button, KeyboardAvoidingView } from 'react-native';
 
 import { createPlaylist } from '../model/qtify';
 import { getUserId } from '../model/spotify';
 
+import token from '../data/token';
+
 export default class Create extends React.Component {
+  static navigationOptions = {
+    title: 'New Playlist'
+  };
   addPlaylist() {
     let playlistName = this.state.text;
-    let token = 'BQAy0UPfxjfcOMj8hPC6fT7NcbA1o-VZypNSTm_X1n6736HEzPVjhrNBfL0xTrmjyDgPE4w8ubSt0AQ5r5HT6KWQ9NJj3AC91TIkKp2z45iGHg1jvb1Vcgq8NQ-OZKqSoFcNtbn43EYs0RqnkOVGgoRypkv6TUgU9wkIjTWHlheOUuyQYN7mERrDZNAUlgV2HZGgV5T09XygPCkn857cSS_lo3cpmxZdy7vg2iBRVMLJbOWkGOCxlZCZPqk6qDE8wOaPwlrdPAogTjKzJb0M5Cza487f7UOflTUQ';
     getUserId(token).then((user) => {
       console.log(user);
       createPlaylist(user, playlistName, token).then((created) => {
@@ -29,16 +33,21 @@ export default class Create extends React.Component {
 
   render() {
     return (
-      <View>
+      <KeyboardAvoidingView behavior="padding" enabled style={{flex: 1}}>
         <TextInput
+          style={{height: 40, fontSize: 20}}
           placeholder="Type the playlist name"
           onChangeText={(text) => this.setState({text})}
+          autoFocus
         />
-        <Button
+        <View>
+          <Button
+          color='#1db954'
           title="Create Playlist"
           onPress={() => this.addPlaylist()}
-        />
-      </View>
+          />
+        </View>
+      </KeyboardAvoidingView>
     );
   }
 }

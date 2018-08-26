@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const host = 'http://10.12.221.138:3000/api';
+const host = 'http://10.12.222.51:3000/api';
 
 export const createPlaylist = (userid, name, token) => {
   return axios.post(host + '/playlist', {
@@ -37,8 +37,10 @@ export const getSongs = (playlistId) => {
   return axios.post(host + '/group/songs', {
     playlistId: playlistId
   }).then((response) => {
+    console.log(response.data);
     return response.data;
   }).catch((error) => {
+    console.log("Error");
     return [];
   });
 };

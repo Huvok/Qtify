@@ -1,8 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput, FlatList, ActivityIndicator, TouchableNativeFeedback } from 'react-native';
+import { StyleSheet, Text, View, TextInput, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 
 import { searchSongs } from '../model/spotify';
 import { sendSong } from '../model/qtify';
+
+import Add from './add';
+
+import token from '../data/token';
 
 export default class Search extends React.Component {
 
@@ -17,7 +21,8 @@ export default class Search extends React.Component {
   }
 
   searchSong(song) {
-    let token = 'BQAy0UPfxjfcOMj8hPC6fT7NcbA1o-VZypNSTm_X1n6736HEzPVjhrNBfL0xTrmjyDgPE4w8ubSt0AQ5r5HT6KWQ9NJj3AC91TIkKp2z45iGHg1jvb1Vcgq8NQ-OZKqSoFcNtbn43EYs0RqnkOVGgoRypkv6TUgU9wkIjTWHlheOUuyQYN7mERrDZNAUlgV2HZGgV5T09XygPCkn857cSS_lo3cpmxZdy7vg2iBRVMLJbOWkGOCxlZCZPqk6qDE8wOaPwlrdPAogTjKzJb0M5Cza487f7UOflTUQ';
+
+    console.log(token);
 
     this.setState({
       text: song,
@@ -27,6 +32,7 @@ export default class Search extends React.Component {
     });
 
     searchSongs(song, token).then((result) => {
+      console.log(result);
       this.setState({
         text: song,
         isLoading: false,
@@ -49,44 +55,49 @@ export default class Search extends React.Component {
   render() {
     if(this.state.isLoading) {
       return (
-        <View>
+        <View style={{flex: 1}}>
           <TextInput
+            style={{flex: 1, height: 40, fontSize: 20}}
             value={this.state.text}
             placeholder="Search for a song"
             onChangeText={(text) => this.searchSong(text)}
           />
-          <ActivityIndicator />
+          <ActivityIndicator style={{flex: 9}} />
         </View>
       );
     } else if(this.state.songs.length == 0) {
       return (
-        <View>
+        <View style={{flex: 1}}>
         <TextInput
-        value={this.state.text}
-        placeholder="Search for a song"
-        onChangeText={(text) => this.searchSong(text)}
+          style={{flex: 1, height: 40, fontSize: 20}}
+          value={this.state.text}
+          placeholder="Search for a song"
+          onChangeText={(text) => this.searchSong(text)}
         />
-        <Text>There are no results</Text>
+        <Text style={{flex: 9}}>There are no results</Text>
         </View>
       );
     } else {
       return (
-        <View>
+        <View style={{flex: 1}}>
         <TextInput
-        value={this.state.text}
-        placeholder="Search for a song"
-        onChangeText={(text) => this.searchSong(text)}
+          style={{flex: 1, height: 40, fontSize: 20}}
+          value={this.state.text}
+          placeholder="Search for a song"
+          onChangeText={(text) => this.searchSong(text)}
         />
-        <FlatList
-          data={this.state.songs}
-          renderItem={({item}) =>
-            <TouchableNativeFeedback
-            onPress={() => this.addSongToPlaylist(item.id)}>
-              <Text style={{padding: 10}}>{item.name}, {item.artist}</Text>
-            </TouchableNativeFeedback>
-          }
-          keyExtractor={(item, index) => index.toString()}
-        />
+        <View style={{flex: 9}}>
+          <FlatList
+            data={this.state.songs}
+            renderItem={({item}) =>
+              <TouchableOpacity
+                onPress={() => this.addSongToPlaylist(item.id)}>
+                <Add image={item.img} song={item.name} artist={item.artist}/>
+              </TouchableOpacity>
+            }
+            keyExtractor={(item, index) => index.toString()}
+          />
+        </View>
         </View>
       );
     }

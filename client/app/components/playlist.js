@@ -4,7 +4,19 @@ import { StyleSheet, Text, View, FlatList, ActivityIndicator, Alert, Button } fr
 import { getSongs } from '../model/qtify';
 import { getSong } from '../model/spotify';
 
+import { styles } from '../styles/style';
+
+import token from '../data/token';
+
+import Vote from './vote';
+
 export default class Playlist extends React.Component {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: navigation.getParam('name', 'Playlist'),
+    };
+  };
+
   constructor(props) {
     super(props);
     let playlistId = this.props.navigation.getParam('playlist', '0000');
@@ -12,17 +24,19 @@ export default class Playlist extends React.Component {
   }
 
   componentDidMount() {
-    let token = 'BQAy0UPfxjfcOMj8hPC6fT7NcbA1o-VZypNSTm_X1n6736HEzPVjhrNBfL0xTrmjyDgPE4w8ubSt0AQ5r5HT6KWQ9NJj3AC91TIkKp2z45iGHg1jvb1Vcgq8NQ-OZKqSoFcNtbn43EYs0RqnkOVGgoRypkv6TUgU9wkIjTWHlheOUuyQYN7mERrDZNAUlgV2HZGgV5T09XygPCkn857cSS_lo3cpmxZdy7vg2iBRVMLJbOWkGOCxlZCZPqk6qDE8wOaPwlrdPAogTjKzJb0M5Cza487f7UOflTUQ';
     return getSongs(this.state.playlist).then((songsIds) => {
       let promises = [];
+      console.log(songsIds);
+      console.log(this.state.playlist);
       songsIds.forEach((song) => {
         promises.push(getSong(song.song_id, token));
       });
 
       return Promise.all(promises).then((songs) => {
+        console.log(songs);
         this.setState({
           isLoading: false,
-          songs: songs,
+          songs: /*songs*/ [{name: 'Hello', artist: 'Adelle', img: 'https://i.scdn.co/image/7afb855c28a2c8ad5ed9d51460736f4022e60bbf'},{name: 'Hello', artist: 'Adelle', img: 'https://i.scdn.co/image/7afb855c28a2c8ad5ed9d51460736f4022e60bbf'}],
           playlist: this.state.playlist
         });
       });
@@ -32,25 +46,30 @@ export default class Playlist extends React.Component {
   render() {
     if(this.state.isLoading) {
       return (
-        <View>
+        <View style={{flex: 1}}>
           <ActivityIndicator />
         </View>
       );
     }
 
     return (
-      <View>
-        <FlatList
-          data={this.state.songs}
-          renderItem={({item}) =>
-            <Text style={{padding: 10}}>{item.artist}, {item.name}, {item.id}</Text>
-          }
-          keyExtractor={(item, index) => index.toString()}
-        />
-        <Button
-          title="Add song"
-          onPress={() => this.props.navigation.navigate('Search', {playlist: this.state.playlist})}
-        />
+      <View style={{flex: 1}}>
+        <View style={{flex: 9}}>
+          <FlatList
+            data={this.state.songs}
+            renderItem={({item}) =>
+              <Vote image={item.img} artist={item.artist} song={item.name} id={item.id} playlist={this.state.playlist}/>
+            }
+            keyExtractor={(item, index) => index.toString()}
+          />
+        </View>
+        <View style={{flex: 1}}>
+          <Button
+            color='#1db954'
+            title="Add song"
+            onPress={() => this.props.navigation.navigate('Search', {playlist: this.state.playlist})}
+          />
+        </View>
       </View>
     );
   }

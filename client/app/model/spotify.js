@@ -12,6 +12,9 @@ export const searchSongs = (song, token) => {
       Authorization: 'Bearer ' + token
     }
   }).then((response) => {
+
+    console.log(response.data);
+
     let songs = [];
 
     const uriToId = (uri) => {
@@ -29,6 +32,7 @@ export const searchSongs = (song, token) => {
 
     return songs;
   }).catch((error) => {
+    console.log(error);
     return [];
   });
 };

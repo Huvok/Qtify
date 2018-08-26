@@ -3,13 +3,16 @@ USE qtify;
 
 CREATE TABLE Users(
 	id VARCHAR(255),
+    token VARCHAR(1000),
+    refresh_token VARCHAR(1000),
 	PRIMARY KEY(id)
 );
 
 CREATE TABLE Groups(
 	id VARCHAR(255),
     group_name VARCHAR(255),
-    token VARCHAR(1000),
+    user_owner VARCHAR(255),
+    FOREIGN KEY (user_owner) REFERENCES Users(id),
     PRIMARY KEY(id)
 );
 

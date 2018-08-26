@@ -1,22 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { createStackNavigator } from 'react-navigation';
 
-import { Main } from './app/components/main'
+import Main from './app/components/main';
+import Playlist from './app/components/playlist';
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Main/>
-      </View>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
+export default createStackNavigator({
+  Main: Main,
+  Playlist: Playlist
+}, {
+  initialRouteName: 'Main'
 });

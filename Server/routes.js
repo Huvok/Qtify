@@ -10,5 +10,7 @@ router.route('/song').post(songCtrl.postSong);
 router.route('/song').put(songCtrl.putSong);
 router.route('/group').get(groupCtrl.getGroups);
 router.route('/group/songs').post(groupCtrl.postSongsFromGroup);
+router.route('/group/user').post(groupCtrl.postUserToGroup);
+router.route('/user').post(groupCtrl.postUser);
 
 module.exports = router;

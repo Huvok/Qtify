@@ -12,8 +12,8 @@ export default class Create extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state {
-      token: this.props.navigation.getParam('token', '');
+    this.state = {
+      token: this.props.navigation.getParam('token', '')
     };
   }
 

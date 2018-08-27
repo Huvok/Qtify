@@ -20,9 +20,6 @@ export default class Search extends React.Component {
   }
 
   searchSong(song) {
-
-    console.log(token);
-
     this.setState({
       text: song,
       isLoading: true,
@@ -30,7 +27,7 @@ export default class Search extends React.Component {
       playlist: this.state.playlist
     });
 
-    searchSongs(song, token).then((result) => {
+    searchSongs(song, this.state.token).then((result) => {
       console.log(result);
       this.setState({
         text: song,

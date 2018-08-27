@@ -19,7 +19,7 @@ export default class Create extends React.Component {
 
   addPlaylist() {
     let playlistName = this.state.text;
-    getUserId(token).then((user) => {
+    getUserId(this.state.token).then((user) => {
       console.log(user);
       createPlaylist(user, playlistName, this.state.token).then((created) => {
         if(created) {

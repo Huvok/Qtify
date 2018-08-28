@@ -15,7 +15,7 @@ module.exports = {
     let conn = dbManager.newConnection();
     conn.query('INSERT INTO users VALUES (?, ?, ?);', [userId, accessToken, refreshToken], function(err, results, fields) {
       if (err)
-        Console.log(err);
+        console.log(err);
       else
         res.send(JSON.stringify({ results: "OK" }));
       dbManager.closeConnection(conn);
@@ -51,9 +51,9 @@ module.exports = {
           let conn = dbManager.newConnection();
           conn.query('UPDATE users SET token = ? WHERE id = ?', [newAccessToken, userId], function (err, results, fields) {
             if (err)
-              Console.log(err);
+              console.log(err);
             else
-              Console.log("Access Token Refreshed!");
+              console.log("Access Token Refreshed!");
             dbManager.closeConnection(conn);
           });
         }
@@ -66,7 +66,7 @@ module.exports = {
     let query = 'SELECT token FROM groups G JOIN users U ON G.user_owner = U.id WHERE G.id = ?';
     conn.query(query, [playlistId], function(err, results, fields) {
       if (err) {
-        Console.log(err);
+        console.log(err);
         return null;
       }
       else
@@ -79,7 +79,7 @@ module.exports = {
     let query = 'SELECT token FROM users WHERE id = ?';
     conn.query(query, [userId], function(err, results, fields) {
       if (err) {
-        Console.log(err);
+        console.log(err);
         return null;
       }
       else

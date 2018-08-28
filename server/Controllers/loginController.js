@@ -62,9 +62,11 @@ module.exports = {
   },
 
   retrieveTokenFromPlaylist : function(playlistId) {
-    let conn = dbManager.newConnection();
-    let query = 'SELECT token FROM groups G JOIN users U ON G.user_owner = U.id WHERE G.id = ?';
-    return new Promise((resolve, reject) => {
+    let promise = new Promise((resolve, reject) => {
+      let conn = dbManager.newConnection();
+
+      let query = 'SELECT token FROM groups G JOIN users U ON G.user_owner = U.id WHERE G.id = ?';
+
       conn.query(query, [playlistId], function(err, results, fields) {
         if (err) {
           console.log(err);
@@ -72,8 +74,11 @@ module.exports = {
         }
         else
           resolve(results[0]['token']);
+
+        dbManager.closeConnection(conn);
       });
     });
+    return promise;
   },
 
   retrieveTokenFromUser : function(userId) {

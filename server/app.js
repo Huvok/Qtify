@@ -9,7 +9,7 @@ var config = require("./config.js");
 
 var client_id = config.client.id; // Your client id
 var client_secret = config.client.secret; // Your secret
-var redirect_uri = 'http://10.12.221.138:3000/callback'; // Your redirect uri
+var redirect_uri = 'http://qtify.herokuapp.com/callback'; // Your redirect uri
 
 var generateRandomString = function(length) {
     var text = '';

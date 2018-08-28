@@ -24,7 +24,7 @@ var generateRandomString = function(length) {
   var stateKey = 'spotify_auth_state';
 
 var app = express();
-var port = 3000;
+var port = process.env.PORT || 3000;
 
 app.use(morgan('dev'));
 app.use(express.json());

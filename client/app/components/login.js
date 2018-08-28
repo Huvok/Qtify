@@ -49,7 +49,7 @@ export default class Login extends React.Component {
   }
 
   render() {
-    const host = 'http://10.12.221.138:3000'
+    const host = 'https://qtify.herokuapp.com';
 
     return (
       <WebView

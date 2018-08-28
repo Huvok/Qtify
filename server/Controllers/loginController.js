@@ -13,7 +13,7 @@ module.exports = {
     var refreshToken = body['refreshToken'];
 
     let conn = dbManager.newConnection();
-    conn.query('INSERT INTO users VALUES (?, ?, ?);', [userId, accessToken, refreshToken], function(err, results, fields) {
+    conn.query('INSERT INTO users VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE token = ?, refresh_token = ?;', [userId, accessToken, refreshToken, accessToken, refreshToken], function(err, results, fields) {
       if (err)
         console.log(err);
       else
@@ -85,5 +85,5 @@ module.exports = {
       else
         return results[0]['token'];
     });
-  } 
+  }
 }

@@ -1,12 +1,13 @@
 var axios = require('axios');
 var dbManager = require('./dbModule.js');
+var loginCtrl = require('./loginController.js');
 
 module.exports = {
     postPlaylist : function(req, res) {
         var body = req.body;
         var userId = body['userId'];
-        var authToken = body['authToken'];
         var playlistName = body['playlistName'];
+        var authToken = loginCtrl.retrieveTokenFromUser(userId);
 
         var config = {
             headers: {
@@ -21,9 +22,9 @@ module.exports = {
             collaborative: true
         }, config)
         .then(function (response) {
-            let query = 'INSERT INTO groups (id, group_name, token) VALUES (?, ?, ?);';
+            let query = 'INSERT INTO groups (id, group_name, user_owner) VALUES (?, ?, ?);';
             let conn = dbManager.newConnection();
-            conn.query(query, [response.data['id'], playlistName, authToken], function (err, results, fields) {
+            conn.query(query, [response.data['id'], playlistName, userId], function (err, results, fields) {
                 if (err) {
                     console.log(err);
                     dbManager.closeConnection(conn);

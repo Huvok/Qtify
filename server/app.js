@@ -5,9 +5,10 @@ var request = require('request'); // "Request" library
 var cors = require('cors');
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
+var config = require("./config.js");
 
-var client_id = 'f97e47dca4814ddab4fdf20cf5121239'; // Your client id
-var client_secret = 'd9ee92ee38b54f23a831e3f925a0ae57'; // Your secret
+var client_id = config.client.id; // Your client id
+var client_secret = config.client.secret; // Your secret
 var redirect_uri = 'http://10.12.221.138:3000/callback'; // Your redirect uri
 
 var generateRandomString = function(length) {

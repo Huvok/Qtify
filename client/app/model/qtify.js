@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const host = 'http://qtify.herokuapp.com/api';
+const host = 'https://qtify.herokuapp.com/api';
 
 export const login = (userId, accessToken, refreshToken) => {
   return axios.post(host + '/login', {

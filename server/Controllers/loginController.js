@@ -64,13 +64,15 @@ module.exports = {
   retrieveTokenFromPlaylist : function(playlistId) {
     let conn = dbManager.newConnection();
     let query = 'SELECT token FROM groups G JOIN users U ON G.user_owner = U.id WHERE G.id = ?';
-    conn.query(query, [playlistId], function(err, results, fields) {
-      if (err) {
-        console.log(err);
-        return null;
-      }
-      else
-        return results[0]['token'];
+    return new Promise((resolve, reject) => {
+      conn.query(query, [playlistId], function(err, results, fields) {
+        if (err) {
+          console.log(err);
+           resolve(null);
+        }
+        else
+          resolve(results[0]['token']);
+      });
     });
   },
 

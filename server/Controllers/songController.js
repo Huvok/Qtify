@@ -6,55 +6,21 @@ module.exports = {
     postSong : function(req, res) {
         var songId = req.body['songId'];
         var playlistId = req.body['playlistId'];
-        var authToken = loginCtrl.retrieveTokenFromPlaylist(playlistId);
-
-        if (authToken) {
-            let conn = dbManager.newConnection();
-            conn.query('SELECT * FROM songs WHERE id = \'' + songId + '\'', function(err, results, fields) {
-                if (err) {
-                    console.log(err);
-                    dbManager.closeConnection(conn);
-                }
-                else {
-                    if (results.length == 0) {
-                        var config = {
-                            headers: {
-                                'Authorization': 'Bearer ' + authToken
-                            }
-                        };
-
-                        axios.get('https://api.spotify.com/v1/tracks/' + songId, config).then(function(response) {
-                            var songName = response.data['name'];
-                            var artist = response.data['artists'][0]['name'];
-                            var imageUrl = response.data['album']['images'][0]['url'];
-
-                            conn.query('INSERT INTO songs(id, song_name, artist, image_url) VALUES(?, ?, ?, ?)', [songId, songName, artist, imageUrl],
-                                function(err, results, fields) {
-                                if (err)
-                                    console.log(err);
-                                else {
-                                    console.log('Song inserted');
-                                    postSongToGroup(conn, songId, playlistId, authToken);
-                                    res.send(JSON.stringify({
-                                        response: 'OK'
-                                    }));
-                                }
-                                dbManager.closeConnection(conn);
-                            });
-                        })
-                        .catch(function(error) {
-                            console.log(error);
-                        });
-                    } else {
-                        postSongToGroup(conn, songId, playlistId, authToken);
-                        res.send(JSON.stringify({
-                            response: 'OK'
-                        }));
-                        dbManager.closeConnection(conn);
-                    }
-                }
-            });
-        }
+        loginCtrl.retrieveTokenFromPlaylist(playlistId).then((authToken) => {
+          let conn = dbManager.newConnection();
+          conn.query('SELECT * FROM songs WHERE id = \'' + songId + '\'', function(err, results, fields) {
+              if (err) {
+                  console.log(err);
+                  dbManager.closeConnection(conn);
+              } else {
+                postSongToGroup(conn, songId, playlistId, authToken);
+                res.send(JSON.stringify({
+                    response: 'OK'
+                }));
+                dbManager.closeConnection(conn);
+              }
+          });
+        });
     },
 
     putSong : function(req, res) {

@@ -78,19 +78,23 @@ module.exports = {
         dbManager.closeConnection(conn);
       });
     });
+    console.log(promise);
     return promise;
   },
 
   retrieveTokenFromUser : function(userId) {
-    let conn = dbManager.newConnection();
-    let query = 'SELECT token FROM users WHERE id = ?';
-    conn.query(query, [userId], function(err, results, fields) {
-      if (err) {
-        console.log(err);
-        return null;
-      }
-      else
-        return results[0]['token'];
+    let promise = new Promise((resolve, reject) => {
+      let conn = dbManager.newConnection();
+      let query = 'SELECT token FROM users WHERE id = ?';
+      conn.query(query, [userId], function(err, results, fields) {
+        if (err) {
+          console.log(err);
+           resolve(null);
+        }
+        else
+          resolve(results[0]['token']);
+      });
     });
+    return promise;
   }
 }
